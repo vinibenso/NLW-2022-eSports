@@ -121,7 +121,7 @@
   "git.enableSmartCommit" : true,
   "editor.accessibilitySupport" : "off",
   "explorer.confirmDragAndDrop" : false,
-  "terminal.integrated.fontSize" : 14,
+  "terminal.integrated.fontSize" : 12,
   "editor.codeActionsOnSave" : {
     "source.fixAll.eslint" : true,
     // "source.organizeImports": true
@@ -267,7 +267,7 @@
   "git.enableSmartCommit" : true,
   "editor.accessibilitySupport" : "off",
   "explorer.confirmDragAndDrop" : false,
-  "terminal.integrated.fontSize" : 14,
+  "terminal.integrated.fontSize" : 12,
   "editor.codeActionsOnSave" : {
     "source.fixAll.eslint" : true,
     // "source.organizeImports": true
