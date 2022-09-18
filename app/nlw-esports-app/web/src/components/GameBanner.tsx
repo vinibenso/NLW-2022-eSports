@@ -5,6 +5,7 @@ interface GameBannerProps {
 }
 
 export function GameBanner(props: GameBannerProps) {
+
   return (
     <a href="" className='relative rounded-lg'>
       <img src={props.bannerUrl} alt="" />
