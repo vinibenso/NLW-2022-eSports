@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Image, FlatList } from 'react-native';
+import { FlatList, Image} from 'react-native';
 
 import logoImg from "../../assets/logo-nlw-esports.png"
-import { GameCard, GameCardProps } from '../../components/GameCard/index';
+import { GameCard, GameCardProps,  } from '../../components/GameCard/index';
 import { Heading } from '../../components/Heading';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -26,6 +26,8 @@ export function Home() {
       .then((data) => setGames(data));
   }, []);
 
+  
+
   return (
     <Background>
       <SafeAreaView style={styles.container}>
@@ -40,7 +42,7 @@ export function Home() {
 
         <FlatList
           data={games}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <GameCard 
               data={item} 
