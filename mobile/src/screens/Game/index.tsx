@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { Text } from 'react-native';
 import { styles } from './styles';
 import { Background } from '../../components/Background';
 import logoImg from '../../assets/logo-nlw-esports.png'
@@ -74,12 +74,20 @@ export function Game() {
           data={duos}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <DuoCard data={item} />
+            <DuoCard 
+              data={item} 
+              onConnect={()=>{}}
+              />
           )}
           horizontal
           style={styles.containerList}
           contentContainerStyle={styles.contentList}
           showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyListText}>
+              Não há anúncios publicados ainda.
+            </Text>
+          )}
 
         />
 
