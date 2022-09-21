@@ -4,6 +4,7 @@ import { Check, GameController } from "phosphor-react";
 import { Input } from "./Form/input";
 import { useEffect, useState, FormEvent } from "react";
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import axios from "axios";
 
 
 interface Game {
@@ -17,26 +18,42 @@ export function CreateAdModal() {
   const [weekDays, setWeekDays] = useState<string[]>(['1'])
   const [useVoiceChannel, setUseVoiceChannel] = useState(false)
 
- 
+
   useEffect(() => {
-    fetch('http://localhost:3333/games')
-      .then(response => response.json())
-      .then(data => {
-        setGames(data)
+    axios('http://localhost:3333/games')
+      .then(response => {
+        setGames(response.data)
       })
   }, [])
 
-  function handleCreateAd(event: FormEvent){
+  async function handleCreateAd(event: FormEvent) {
     event.preventDefault()
 
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
 
-    console.log(useVoiceChannel)
+    if(!data.name){
+      return
+    }
 
+try {
+  await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
+    "name": data.name,
+    "yearsPlaying": Number(data.yearsPlaying),
+    "discord": data.discord,
+    "weekDays": weekDays.map(Number),
+    "hourStart": data.hourStart,
+    "hourEnd": data.hourEnd,
+    "useVoiceChanel": useVoiceChannel,
+  })
+  alert('Anúncio criado com sucesso!')
+} catch (error) {
+  console.log(error)
+  alert("Erro ao criar o auncio!")
+}
 
   }
-  
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className='bg-black/70 inset-0 fixed ' />
@@ -74,7 +91,7 @@ export function CreateAdModal() {
           <div className='grid grid-cols-2 gap-6'>
             <div className='flex flex-col gap-2'>
               <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
-              <Input name= 'yearsPlaying' id="yearsPlaying" placeholder='Tudo bem ser ZERO' />
+              <Input name='yearsPlaying' id="yearsPlaying" placeholder='Tudo bem ser ZERO' />
             </div>
             <div className='flex flex-col gap-2'>
               <label htmlFor="discord">Qual seu discord?</label>
@@ -86,11 +103,11 @@ export function CreateAdModal() {
             <div className='flex flex-col gap-2'>
               <label htmlFor="weekDays">Quando costuma jogar?</label>
 
-              <ToggleGroup.Root 
-              className="grid grid-cols-4 gap-2 font-semibold" 
-              type="multiple"
-              
-              onValueChange={setWeekDays}
+              <ToggleGroup.Root
+                className="grid grid-cols-4 gap-2 font-semibold"
+                type="multiple"
+
+                onValueChange={setWeekDays}
               >
                 <ToggleGroup.Item
                   value="0"
@@ -103,7 +120,7 @@ export function CreateAdModal() {
                   value="1"
                   title='Segunda'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('1') ? "bg-violet-500" : ''} `}                    
+                    ('1') ? "bg-violet-500" : ''} `}
                 >
                   S
                 </ToggleGroup.Item>
@@ -111,7 +128,7 @@ export function CreateAdModal() {
                   value="2"
                   title='Terça'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('2') ? "bg-violet-500" : 'bg-zinc-900'} `}                    
+                    ('2') ? "bg-violet-500" : 'bg-zinc-900'} `}
                 >
                   T
                 </ToggleGroup.Item>
@@ -119,8 +136,8 @@ export function CreateAdModal() {
                   value="3"
                   title='Quarta'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('3') ? "bg-violet-500" : 'bg-zinc-900'} `}                    
-                
+                    ('3') ? "bg-violet-500" : 'bg-zinc-900'} `}
+
                 >
                   Q
                 </ToggleGroup.Item>
@@ -128,7 +145,7 @@ export function CreateAdModal() {
                   value="4"
                   title='Quinta'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('4') ? "bg-violet-500" : 'bg-zinc-900'} `}                    
+                    ('4') ? "bg-violet-500" : 'bg-zinc-900'} `}
                 >
                   Q
                 </ToggleGroup.Item>
@@ -136,7 +153,7 @@ export function CreateAdModal() {
                   value="5"
                   title='Sexta'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('5') ? "bg-violet-500" : 'bg-zinc-900'} `}                    
+                    ('5') ? "bg-violet-500" : 'bg-zinc-900'} `}
                 >
                   S
                 </ToggleGroup.Item>
@@ -144,7 +161,7 @@ export function CreateAdModal() {
                   value="6"
                   title='Sabado'
                   className={`w-8 h-8 rounded bg-zinc-900 hover:bg-zinc-700 ${weekDays.includes
-                    ('6') ? "bg-violet-500" : 'bg-zinc-900'} `}                    
+                    ('6') ? "bg-violet-500" : 'bg-zinc-900'} `}
                 >
                   S
                 </ToggleGroup.Item>
@@ -161,16 +178,16 @@ export function CreateAdModal() {
           </div>
 
           <div className='mt-2 items-center flex gap-2 text-sm'>
-            <Checkbox.Root 
-            checked={useVoiceChannel}
-            onCheckedChange={(checked) => {
-              if (checked === true ) {
-                setUseVoiceChannel(true)
-              } else {
-                setUseVoiceChannel(false)
-              }
-            }}
-            className="w-6 h-6 p-1 rounded bg-zinc-900"
+            <Checkbox.Root
+              checked={useVoiceChannel}
+              onCheckedChange={(checked) => {
+                if (checked === true) {
+                  setUseVoiceChannel(true)
+                } else {
+                  setUseVoiceChannel(false)
+                }
+              }}
+              className="w-6 h-6 p-1 rounded bg-zinc-900"
             >
               <Checkbox.Indicator>
                 <Check className="w-4 h-4 text-emerald-400" />
